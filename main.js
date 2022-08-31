@@ -4,10 +4,14 @@ const desktopMenu = document.querySelector(".desktop-menu");
 const mobileMenu = document.querySelector(".mobile-menu");
 const mobileHamburger = document.querySelector(".menu");
 
-const asideMenu = document.querySelector(".product-detail");
+// const asideMenu = document.querySelector(".product-detail");
+const shoppingCartMenu = document.querySelector("#shopping-cart");
 const cartIcon = document.querySelector(".navbar-shopping-cart");
 
 const cardsContainer = document.querySelector(".cards-container");
+
+const productDetailAside = document.querySelector("#product-detail");
+const productDetailClose = document.querySelector(".product-detail-close");
 
 navbarEmail.addEventListener("click", toggleDesktopMenu);
 
@@ -15,28 +19,35 @@ mobileHamburger.addEventListener("click", toggleMobileMenu);
 
 cartIcon.addEventListener("click", toggleAside);
 
+productDetailClose.addEventListener("click", CloseProductDetail)
 
 
 function toggleDesktopMenu() {
-    const isAsideMenuClosed = asideMenu.classList.contains("hide");
+    const isshoppingCartMenuClosed = shoppingCartMenu.classList.contains("hide");
 
-    if (isAsideMenuClosed) {
+    if (isshoppingCartMenuClosed) {
         desktopMenu.classList.toggle("hide");
     } else {
         desktopMenu.classList.toggle("hide");
-        asideMenu.classList.toggle("hide");
+        shoppingCartMenu.classList.toggle("hide");
         
     }
 }
 
 function toggleMobileMenu() {
-    const isAsideMenuClosed = asideMenu.classList.contains("hide");
+    const isshoppingCartMenuClosed = shoppingCartMenu.classList.contains("hide");
+    const isProductDetailClosed = productDetailAside.classList.contains("hide");
 
-    if (isAsideMenuClosed) {
+    if (isshoppingCartMenuClosed && isProductDetailClosed) {
         mobileMenu.classList.toggle("hide");
     } else {
+        if (!isshoppingCartMenuClosed) {
+            shoppingCartMenu.classList.toggle("hide");
+        }else{
+            productDetailAside.classList.toggle("hide");
+        }
         mobileMenu.classList.toggle("hide");
-        asideMenu.classList.toggle("hide");
+        
         
     }
     
@@ -45,25 +56,34 @@ function toggleMobileMenu() {
 function toggleAside() {
     const isMobileMenuClosed = mobileMenu.classList.contains("hide");
     const isDesktopMenuClosed = desktopMenu.classList.contains("hide");
+    const isProductDetailClosed = productDetailAside.classList.contains("hide");
 
-    if (isMobileMenuClosed && isDesktopMenuClosed) {
-        asideMenu.classList.toggle("hide");
+    if (isMobileMenuClosed && isDesktopMenuClosed && isProductDetailClosed) {
+        shoppingCartMenu.classList.toggle("hide");
     } else {
         if (!isMobileMenuClosed) {
             mobileMenu.classList.toggle("hide");
-            asideMenu.classList.toggle("hide");
+            shoppingCartMenu.classList.toggle("hide");
         }
         if (!isDesktopMenuClosed) {
             desktopMenu.classList.toggle("hide");
-            asideMenu.classList.toggle("hide");
-        }      
-    }
-
-   
-        // desktopMenu.classList.toggle("hide");
-        // asideMenu.classList.toggle("hide");
-        
+            shoppingCartMenu.classList.toggle("hide");
+        }  
+        if (!isProductDetailClosed) {
+            productDetailAside.classList.toggle("hide");
+            shoppingCartMenu.classList.toggle("hide");
+        }     
+    }        
     
+}
+
+function OpenProductDetail() {
+    shoppingCartMenu.classList.add("hide");
+    productDetailAside.classList.remove("hide");
+}
+
+function CloseProductDetail() {
+    productDetailAside.classList.add("hide");
 }
 
 const productsList = [];
@@ -91,6 +111,7 @@ productsList.push({
     price: 120,
 });
 
+
 function listProducts(productsList) {
     for (const product of productsList) {
     
@@ -116,6 +137,7 @@ function listProducts(productsList) {
         Info.appendChild(productName);
     
         const productFigure = document.createElement("figure");
+        productFigure.addEventListener("click", OpenProductDetail);
     
         const productFigureImg = document.createElement("img");
         productFigureImg.setAttribute("src", "./icons/bt_add_to_cart.svg");
